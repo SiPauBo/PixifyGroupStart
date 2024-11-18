@@ -18,6 +18,19 @@ if (isset($_SESSION['user_id'])) {
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-primary" href="#">Pixify</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Discover</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Subscriptions</a></li>
+            </ul>
+        </div>
+        <button class="btn btn-outline-primary me-2">Login</button>
+        <button class="btn btn-primary">Sign Up</button>
+    </div>
+</nav>
     <!-- Login Form -->
     <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <div class="col-md-6">
