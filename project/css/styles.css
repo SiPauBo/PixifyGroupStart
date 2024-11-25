@@ -10,310 +10,159 @@
   --blue-800: #394B94;
   --blue-900: #324276;
   --blue-950: #222A49;
-
-  --font-sans: "Kanit", sans-serif;
-  --background-color: var(--blue-50);
-  --text-color: var(--blue-900);
 }
 
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: var(--font-sans);
+/* Example Usage */
+.header-section {
+  background-color: var(--blue-300);
+  color: var(--blue-900);
 }
 
-/* General Typography */
-body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  line-height: 1.6;
+.about-section h2 {
+  color: var(--blue-700);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Kanit", serif;
-  margin-bottom: 0.5rem;
+.services-section {
+  background-color: var(--blue-100);
 }
 
-p {
-  margin-bottom: 1rem;
-  line-height: 1.8;
-}
-
-/* Buttons */
-.btn {
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  cursor: pointer;
+.join-section {
+  background-color: var(--blue-300);
+  color: var(--blue-50);
 }
 
 .btn-primary {
   background-color: var(--blue-500);
-  color: white;
-  border: none;
+  border-color: var(--blue-500);
 }
 
 .btn-primary:hover {
   background-color: var(--blue-600);
+  border-color: var(--blue-600);
 }
 
-/* Navbar */
-.navbar {
-  background-color: var(--blue-600);
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 
-.navbar a {
-  color: white;
-  text-decoration: none;
+.text-blue-600 {
+  color: rgba(37, 99, 235);
+  font-weight: 900;
+}
+
+*{
+  font-family: "Kanit", serif;
+  font-weight: 400;
+  font-style: normal; 
+}
+
+/*Font Section*/
+.kanit-thin {
+  font-family: "Kanit", serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.kanit-extralight {
+  font-family: "Kanit", serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.kanit-light {
+  font-family: "Kanit", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.kanit-regular {
+  font-family: "Kanit", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.kanit-medium {
+  font-family: "Kanit", serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.kanit-semibold {
+  font-family: "Kanit", serif;
   font-weight: 600;
-  margin: 0 10px;
+  font-style: normal;
 }
 
-.navbar a:hover {
-  text-decoration: underline;
+.kanit-bold {
+  font-family: "Kanit", serif;
+  font-weight: 700;
+  font-style: normal;
 }
 
-/* Footer */
-.footer {
-  background-color: var(--blue-700);
-  color: white;
-  padding: 1rem;
-  text-align: center;
-  margin-top: 2rem;
+.kanit-extrabold {
+  font-family: "Kanit", serif;
+  font-weight: 800;
+  font-style: normal;
 }
 
-.footer a {
-  color: var(--blue-400);
-  text-decoration: none;
-  margin: 0 10px;
+.kanit-black {
+  font-family: "Kanit", serif;
+  font-weight: 900;
+  font-style: normal;
 }
 
-.footer a:hover {
-  text-decoration: underline;
+.kanit-thin-italic {
+  font-family: "Kanit", serif;
+  font-weight: 100;
+  font-style: italic;
 }
 
-/* Card Design */
-.image-card {
-  position: relative;
-  width: calc(20% - 10px); /* 5 cards per row with spacing */
-  margin: 5px;
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+.kanit-extralight-italic {
+  font-family: "Kanit", serif;
+  font-weight: 200;
+  font-style: italic;
 }
 
-.image-card:hover {
-  transform: translateY(-5px);
+.kanit-light-italic {
+  font-family: "Kanit", serif;
+  font-weight: 300;
+  font-style: italic;
 }
 
-.card-link {
-  display: block;
-  width: 100%;
-  height: 100%;
+.kanit-regular-italic {
+  font-family: "Kanit", serif;
+  font-weight: 400;
+  font-style: italic;
 }
 
-.card-image {
-  width: 100%;
-  height: 200px; /* Fixed height for uniformity */
-  object-fit: cover;
-  transition: transform 0.3s ease-in-out;
+.kanit-medium-italic {
+  font-family: "Kanit", serif;
+  font-weight: 500;
+  font-style: italic;
 }
 
-.image-card:hover .card-image {
-  transform: scale(1.1);
+.kanit-semibold-italic {
+  font-family: "Kanit", serif;
+  font-weight: 600;
+  font-style: italic;
 }
 
-.card-hover-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+.kanit-bold-italic {
+  font-family: "Kanit", serif;
+  font-weight: 700;
+  font-style: italic;
 }
 
-.image-card:hover .card-hover-info {
-  opacity: 1;
-  visibility: visible;
+.kanit-extrabold-italic {
+  font-family: "Kanit", serif;
+  font-weight: 800;
+  font-style: italic;
 }
 
-.card-details {
-  display: flex;
-  align-items: center;
+.kanit-black-italic {
+  font-family: "Kanit", serif;
+  font-weight: 900;
+  font-style: italic;
 }
-
-.user-image {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: 2px solid white;
-}
-
-.username {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.card-actions i {
-  font-size: 18px;
-  cursor: pointer;
-}
-
-/* Grid for Posts */
-#posts-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-/* Comment Section */
-.comment-container {
-  margin-top: 20px;
-}
-
-.comment-box {
-  margin-bottom: 15px;
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.nested-comments {
-  margin-left: 20px;
-  border-left: 3px solid #ddd;
-  padding-left: 10px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .image-card {
-      width: calc(50% - 10px); /* 2 cards per row on smaller screens */
-  }
-
-  #posts-container {
-      justify-content: center;
-  }
-}
-/* Toggle Buttons */
-/* Toggle Buttons */
-.toggle-buttons {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.toggle-buttons a {
-  display: inline-block;
-  margin: 0 10px;
-  padding: 10px 20px;
-  text-decoration: none;
-  font-weight: bold;
-  color: var(--blue-500);
-  border: 2px solid var(--blue-500);
-  border-radius: 5px;
-  background-color: var(--blue-100);
-  transition: all 0.3s ease;
-}
-
-.toggle-buttons a.active {
-  background-color: var(--blue-500);
-  color: white;
-}
-
-.toggle-buttons a:hover {
-  background-color: var(--blue-600);
-  color: white;
-}
-
-body {
-  background-color: var(--blue-50);
-  color: var(--blue-900);
-  font-family: 'Kanit', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-.image-card {
-  position: relative;
-  width: calc(20% - 10px); /* 5 cards per row with spacing */
-  margin: 10px;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  background-color: var(--blue-100);
-}
-
-.image-card:hover {
-  transform: scale(1.05);
-}
-
-.card-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.card-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  transition: transform 0.3s ease-in-out;
-}
-
-.image-card:hover .card-image {
-  transform: scale(1.1);
-}
-
-.card-hover-info {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
-}
-
-.image-card:hover .card-hover-info {
-  opacity: 1;
-  visibility: visible;
-}
-
-.user-image {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: 2px solid white;
-}
-
-.username {
-  font-size: 14px;
-  font-weight: bold;
-}
+/*asdadssa*/

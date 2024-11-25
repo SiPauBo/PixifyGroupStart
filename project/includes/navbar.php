@@ -16,7 +16,7 @@ if ($is_logged_in) {
 }
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg bg-light">
     <div class="container">
         <a class="navbar-brand text-2xl text-blue-600" href="../pages/index.php">Pixify</a>
         
