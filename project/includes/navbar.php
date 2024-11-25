@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include '../includes/db_connection.php';
 
 // Check if the user is logged in
@@ -24,7 +26,7 @@ if ($is_logged_in) {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Discover</a>
+                    <a class="nav-link" href="discover.php">Discover</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Subscriptions</a>
@@ -32,6 +34,13 @@ if ($is_logged_in) {
 
                 <!-- Conditional Rendering Based on Login Status -->
                 <?php if ($is_logged_in): ?>
+                    <!-- Admin Dashboard Link -->
+                    <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../pages/admin_dashboard.php">Admin Dashboard</a>
+                        </li>
+                    <?php endif; ?>
+
                     <!-- Display Cart Icon, Profile Picture, and Logout Button if Logged In -->
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="cart.php">

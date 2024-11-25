@@ -17,6 +17,7 @@ if (isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
+<?php include '../includes/navbar.php'; ?>
 
     <!-- Login Form -->
     <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">

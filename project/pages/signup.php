@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-
+<?php include '../includes/navbar.php'; ?>
     <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <div class="col-md-6">
             <h2 class="text-center mb-4">Create an Account</h2>

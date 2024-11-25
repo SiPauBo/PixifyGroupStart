@@ -1,13 +1,15 @@
- <?php
-session_start();
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include '../includes/db_connection.php';
 
-// Check if admin is logged in (assuming you have session-based authentication)
+// Check if admin is logged in
 if (!isset($_SESSION['admin_logged_in'])) {
     header('Location: login.php');
     exit();
 }
-?> 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -48,6 +50,11 @@ if (!isset($_SESSION['admin_logged_in'])) {
                                 Site Settings
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="reports.php">
+                                Reports
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -56,22 +63,16 @@ if (!isset($_SESSION['admin_logged_in'])) {
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
-                            Export
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Statistics Section -->
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card text-white bg-primary mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Total Users</h5>
                                 <p class="card-text">
                                     <?php
-                                    // Query to count users
                                     $result = $connection->query("SELECT COUNT(*) AS count FROM users");
                                     $row = $result->fetch_assoc();
                                     echo $row['count'];
@@ -80,13 +81,12 @@ if (!isset($_SESSION['admin_logged_in'])) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card text-white bg-success mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Total Posts</h5>
                                 <p class="card-text">
                                     <?php
-                                    // Query to count posts
                                     $result = $connection->query("SELECT COUNT(*) AS count FROM posts");
                                     $row = $result->fetch_assoc();
                                     echo $row['count'];
@@ -95,13 +95,12 @@ if (!isset($_SESSION['admin_logged_in'])) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card text-white bg-warning mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">New Comments</h5>
                                 <p class="card-text">
                                     <?php
-                                    // Query to count new comments (e.g., in the last 24 hours)
                                     $result = $connection->query("SELECT COUNT(*) AS count FROM comments WHERE created_at >= NOW() - INTERVAL 1 DAY");
                                     $row = $result->fetch_assoc();
                                     echo $row['count'];
@@ -110,8 +109,22 @@ if (!isset($_SESSION['admin_logged_in'])) {
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-danger mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Open Reports</h5>
+                                <p class="card-text">
+                                    <?php
+                                    $result = $connection->query("SELECT COUNT(*) AS count FROM reports WHERE status = 'open'");
+                                    $row = $result->fetch_assoc();
+                                    echo $row['count'];
+                                    ?>
+                                </p>
+                                <a href="reports.php" class="btn btn-light btn-sm">View Reports</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
                 <!-- Management Options -->
                 <h3>Management Options</h3>
                 <div class="row">
@@ -132,7 +145,6 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
     <?php include '../includes/footer.php'; ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

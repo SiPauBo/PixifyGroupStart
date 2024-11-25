@@ -11,20 +11,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $query = "SELECT id, username, password_hash, first_time_login FROM users WHERE email = ?";
+    $query = "SELECT id, username, password_hash, first_time_login, is_admin FROM users WHERE email = ?";
     $stmt = $connection->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($id, $username, $hashedPassword, $firstTimeLogin);
+        $stmt->bind_result($id, $username, $hashedPassword, $firstTimeLogin, $isAdmin);
         $stmt->fetch();
 
         if (password_verify($password, $hashedPassword)) {
             // Set session variables
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
+
+            // Check if the user is an admin
+            if ($isAdmin) {
+                $_SESSION['admin_logged_in'] = true;
+                header("Location: ../pages/admin_dashboard.php"); // Redirect to admin dashboard
+                exit();
+            }
 
             // Redirect based on first-time login status
             if ($firstTimeLogin) {
