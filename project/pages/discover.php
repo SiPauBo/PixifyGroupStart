@@ -40,6 +40,7 @@ $result = $connection->query($postsQuery) or die($connection->error);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <?php include '../includes/font.php'; ?>
     <style>
         #posts-container {
             display: flex;
