@@ -1,5 +1,4 @@
-﻿# Pixify Wiki
- ---
+
 
  # Pixify Wiki
 
