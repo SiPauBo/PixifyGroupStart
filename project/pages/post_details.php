@@ -109,11 +109,42 @@ while ($row = $commentsResult->fetch_assoc()) {
         textarea {
             resize: none;
         }
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.5); /* Transparent white */
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .fullscreen-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10000;
+        }
     </style>
 </head>
 <body>
 
     <?php include '../includes/navbar.php'; ?>
+
+    <!-- Fullscreen Overlay -->
+    <div id="fullscreenOverlay" class="fullscreen-overlay">
+        <img id="fullscreenImage" src="" alt="Fullscreen View">
+        <button class="btn btn-secondary back-btn" onclick="exitFullscreen()">Back</button>
+
+    </div>
 
     <div class="container mt-4">
         <!-- Post Details Section -->
@@ -192,12 +223,24 @@ while ($row = $commentsResult->fetch_assoc()) {
     <script>
         function toggleFullscreen() {
             const img = document.getElementById('postImage');
-            if (!document.fullscreenElement) {
-                img.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
+            const overlay = document.getElementById('fullscreenOverlay');
+            const fullscreenImg = document.getElementById('fullscreenImage');
+
+            fullscreenImg.src = img.src; // Use the post image source
+            overlay.style.display = 'flex'; // Show the overlay
         }
+
+        function exitFullscreen() {
+    const overlay = document.getElementById('fullscreenOverlay');
+    if (overlay) {
+        overlay.style.display = 'none'; // Hide the overlay
+    } else {
+        console.error("Fullscreen overlay not found.");
+    }
+}
+//tmm
     </script>
 </body>
+
 </html>
+
