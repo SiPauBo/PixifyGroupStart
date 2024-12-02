@@ -12,7 +12,7 @@ if ($is_logged_in) {
     $user_id = $_SESSION['user_id'];
     $result = $connection->query("SELECT profile_picture FROM users WHERE id = $user_id");
     $user = $result->fetch_assoc();
-    $profile_picture = $user['profile_picture'] ?? 'default_profile.png'; // Default image if no profile picture
+    $profile_picture = $user['profile_picture'] ?? 'user-default.png'; // Default image if no profile picture
 }
 ?>
 
@@ -51,9 +51,14 @@ if ($is_logged_in) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="profile.php">
-                            <img src="../images/<?php echo htmlspecialchars($profile_picture); ?>" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px;">
-                        </a>
+                    <li class="nav-item">
+                    <a class="nav-link" href="profile.php">
+                    <img src="<?php echo isset($profile_picture) && !empty($profile_picture) ? '../uploads/' . htmlspecialchars($profile_picture) : '../images/user-default.png'; ?>" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px;">
+</a>
+
+    </a>
+</li>
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../includes/logout.php">Logout</a>

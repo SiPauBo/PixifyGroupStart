@@ -19,9 +19,14 @@ if (empty($social_links)) {
     die("Invalid JSON format for social links.");
 }
 
-// Set the upload directory using an absolute path
-$upload_dir = $_SERVER['DOCUMENT_ROOT'] . "/Pixify/project/uploads/";
+// Set the upload directory using a valid path
+$upload_dir = realpath(__DIR__ . "/../uploads/") . "/";
 $profile_picture_name = null;
+
+// Ensure the upload directory exists
+if (!is_dir($upload_dir)) {
+    mkdir($upload_dir, 0777, true); // Create the directory if it doesn't exist
+}
 
 if (isset($profile_picture) && $profile_picture['size'] > 0) {
     $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
