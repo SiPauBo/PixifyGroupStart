@@ -11,7 +11,7 @@ if ($section === 'discover') {
     $postsQuery = "
         SELECT p.id, p.title, p.image_url, u.username, u.profile_picture
         FROM posts p
-        JOIN users u ON p.user_id = u.id
+        JOIN users u ON p.user_id = u.id    
         ORDER BY p.created_at DESC
         LIMIT 20;
     ";
@@ -27,7 +27,7 @@ if ($section === 'discover') {
     ";
 }
 
-$result = $connection->query($postsQuery) or die($connection->error);
+$resulting = $connection->query($postsQuery) or die($connection->error);
 
 ?>
 
@@ -117,9 +117,9 @@ $result = $connection->query($postsQuery) or die($connection->error);
         </div>
 
         <!-- Posts Container -->
-        <div id="posts-container" class="d-flex flex-wrap justify-content-center">
-            <?php if ($result->num_rows > 0): ?>
-                <?php while ($post = $result->fetch_assoc()): ?>
+        <div id="posts-container" class="d-flex flex-wrap justify-content-center"> 
+            <?php if ($resulting->num_rows > 0): ?>
+                <?php while ($post = $resulting->fetch_assoc()): ?>
                     <?php renderPostCard($post); ?>
                 <?php endwhile; ?>
             <?php else: ?>
