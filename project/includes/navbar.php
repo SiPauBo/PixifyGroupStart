@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 include '../includes/db_connection.php';
 
+
 // Check if the user is logged in
 $is_logged_in = isset($_SESSION['user_id']); 
 
