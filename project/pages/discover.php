@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 include '../includes/db_connection.php';
 include '../includes/post_card.php';
+include '../includes/floater.php';
 
 $section = isset($_GET['section']) ? $_GET['section'] : 'discover';
 
@@ -39,68 +40,11 @@ $resulting = $connection->query($postsQuery) or die($connection->error);
     <title>Discover - Pixify</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/post_style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <?php include '../includes/font.php'; ?>
     <style>
-        #posts-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 20px;
-        }
-        .image-card {
-            width: calc(20% - 10px); /* 5 cards per row */
-            position: relative;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-        .image-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .image-card:hover {
-            transform: scale(1.05);
-        }
-        .card-hover-info {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            text-align: center;
-            padding: 10px;
-            display: none;
-        }
-        .image-card:hover .card-hover-info {
-            display: block;
-        }
-        .toggle-buttons {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .toggle-buttons a {
-            display: inline-block;
-            margin: 0 10px;
-            padding: 10px 20px;
-            text-decoration: none;
-            font-weight: bold;
-            color: var(--blue-500);
-            border: 2px solid var(--blue-500);
-            border-radius: 5px;
-            background-color: var(--blue-100);
-            transition: all 0.3s ease;
-        }
-        .toggle-buttons a.active {
-            background-color: var(--blue-500);
-            color: white;
-        }
-        .toggle-buttons a:hover {
-            background-color: var(--blue-600);
-            color: white;
-        }
+        
         </style>
 </head>
 <body>

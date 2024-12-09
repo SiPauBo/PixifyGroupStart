@@ -151,22 +151,29 @@ while ($row = $commentsResult->fetch_assoc()) {
         <div class="post-container">
             <!-- Image Section -->
             <div class="post-image">
-                <img src="<?php echo htmlspecialchars($post['image_url']); ?>" alt="<?php echo htmlspecialchars($post['title']); ?>" class="img-fluid" id="postImage">
+            <img src="<?php echo htmlspecialchars('../uploads/' . $post['image_url']); ?>" 
+             alt="<?php echo htmlspecialchars($post['title']); ?>" 
+             class="img-fluid" 
+             id="postImage">
                 <button class="btn btn-primary fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
             </div>
+            
 
             <!-- Post Details -->
+             
             <div class="post-details">
                 <h2><?php echo htmlspecialchars($post['title']); ?></h2>
                 <p><i class="bi bi-calendar"></i> Posted on: <?php echo date("F j, Y", strtotime($post['created_at'])); ?></p>
                 <p><i class="bi bi-heart-fill text-danger"></i> <?php echo $post['like_count']; ?> Likes</p>
                 <p><?php echo htmlspecialchars($post['description']); ?></p>
                 <div class="d-flex align-items-center mt-3">
-                    <img src="../images/<?php echo htmlspecialchars($post['profile_picture'] ?? 'default_profile.png'); ?>" alt="User" class="rounded-circle me-2" style="width: 50px; height: 50px;">
+                    <img src="../uploads/<?php echo htmlspecialchars($post['profile_picture'] ?? '../images/user-default.png'); ?>" alt="User" class="rounded-circle me-2" style="width: 50px; height: 50px;">
                     <strong><?php echo htmlspecialchars($post['username']); ?></strong>
                 </div>
             </div>
         </div>
+
+    
 
         <!-- Comments Section -->
         <div class="comment-container">
@@ -186,7 +193,7 @@ while ($row = $commentsResult->fetch_assoc()) {
             <?php foreach ($comments as $parent): ?>
                 <div class="comment-box">
                     <div class="d-flex align-items-center mb-2">
-                        <img src="../images/<?php echo htmlspecialchars($parent['profile_picture'] ?? 'default_profile.png'); ?>" alt="User" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                        <img src="../uploads/<?php echo htmlspecialchars($parent['profile_picture'] ?? '../images/user-default.png'); ?>" alt="User" class="rounded-circle me-2" style="width: 40px; height: 40px;">
                         <strong><?php echo htmlspecialchars($parent['username']); ?></strong>
                     </div>
                     <p class="mb-1"><?php echo htmlspecialchars($parent['comment']); ?></p>
@@ -204,7 +211,7 @@ while ($row = $commentsResult->fetch_assoc()) {
                             <?php foreach ($parent['children'] as $child): ?>
                                 <div class="comment-box">
                                     <div class="d-flex align-items-center mb-2">
-                                        <img src="../images/<?php echo htmlspecialchars($child['profile_picture'] ?? 'default_profile.png'); ?>" alt="User" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+                                        <img src="../uploads/<?php echo htmlspecialchars($child['profile_picture'] ?? '../images/user-default.png'); ?>" alt="User" class="rounded-circle me-2" style="width: 30px; height: 30px;">
                                         <strong><?php echo htmlspecialchars($child['username']); ?></strong>
                                     </div>
                                     <p class="mb-1"><?php echo htmlspecialchars($child['comment']); ?></p>
@@ -233,11 +240,13 @@ while ($row = $commentsResult->fetch_assoc()) {
         function exitFullscreen() {
     const overlay = document.getElementById('fullscreenOverlay');
     if (overlay) {
+        console.log("Hiding fullscreen overlay...");
         overlay.style.display = 'none'; // Hide the overlay
     } else {
         console.error("Fullscreen overlay not found.");
     }
 }
+
 //tmm
     </script>
 </body>

@@ -165,7 +165,11 @@
   font-weight: 900;
   font-style: italic;
 }
+
+
 /*asdadssa*/
+
+/* Fullscreen Overlay */
 .fullscreen-overlay {
   position: fixed;
   top: 0;
@@ -193,4 +197,176 @@
   z-index: 10000;
 }
 
+/* Floater Button */
+.floater-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff; /* Customize color */
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 24px;
+}
+
+.floater-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+
 /*Inshallah*/
+
+.floater-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff; /* Customize color */
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 24px;
+}
+
+.floater-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/*tamam*/
+
+
+/* Existing Styles - Ensure these are retained */
+.header-section {
+  background-color: var(--blue-300);
+  color: var(--blue-900);
+}
+
+.services-section {
+  background-color: var(--blue-100);
+}
+
+.btn-primary {
+  background-color: var(--blue-500);
+  border-color: var(--blue-500);
+}
+
+.btn-primary:hover {
+  background-color: var(--blue-600);
+  border-color: var(--blue-600);
+}
+
+/*asd*/
+
+.toggle-buttons {
+  text-align: center;
+  margin: 20px 0;
+}
+.toggle-buttons a {
+  display: inline-block;
+  margin: 0 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--blue-500);
+  border: 2px solid var(--blue-500);
+  border-radius: 5px;
+  background-color: var(--blue-100);
+  transition: all 0.3s ease;
+}
+.toggle-buttons a.active {
+  background-color: var(--blue-500);
+  color: white;
+}
+.toggle-buttons a:hover {
+  background-color: var(--blue-600);
+  color: white;
+}
+
+
+/* Post Images */#posts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.image-card {
+  position: relative;
+  width: calc(20% - 10px); /* 5 cards per row */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s;
+  background-color: white;
+}
+
+.image-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease-in-out;
+}
+
+.image-card:hover {
+  transform: scale(1.05);
+}
+
+.image-card:hover img {
+  transform: scale(1.1); /* Slight zoom effect */
+}
+
+.card-hover-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20%; /* Occupy 20% of the card's height */
+  background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  justify-content: flex-start;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s, opacity 0.3s ease-in-out;
+}
+
+.image-card:hover .card-hover-info {
+  visibility: visible;
+  opacity: 1;
+}
+
+.user-image {
+  width: auto; /* Allow width to scale proportionally */
+  height: 80%; /* Maintain height relative to the .card-hover-info */
+  border-radius: 50%; /* Circular profile picture */
+  margin-right: 10px;
+  border: 2px solid white; /* Highlight with border */
+  object-fit: cover; /* Ensure image fits within the circular area */
+}
+
+.username {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: white;
+}
+/*asd*/
