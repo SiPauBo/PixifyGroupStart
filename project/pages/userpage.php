@@ -19,10 +19,7 @@ include '../includes/db_connection.php';
       background-color: #f5f8fc;
     }
 
-    .nav-link {
-      color: #000;
-      font-weight: bold;
-    }
+    
 
     .profile-banner {
       background-image: url('https://via.placeholder.com/1200x300');

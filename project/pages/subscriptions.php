@@ -21,10 +21,7 @@ include '../includes/db_connection.php';
       background-color: #f5f8fc;
     }
     
-    .nav-link {
-      color: #000;
-      font-weight: bold;
-    }
+    
 
     .btn-custom {
       background-color: #e0ecff;
@@ -39,25 +36,7 @@ include '../includes/db_connection.php';
       background-color: #d0d8f0;
     }
 
-    footer {
-      margin-top: 50px;
-      font-size: 14px;
-      text-align: center;
-      color: gray;
-    }
-
-    footer .container {
-      max-width: 600px;
-    }
-
-    footer hr {
-      border: 0.5px solid #e0e0e0;
-    }
-
-    footer p {
-      margin: 0;
-      line-height: 1.5;
-    }
+    
 
   </style>
 
@@ -115,7 +94,8 @@ include '../includes/db_connection.php';
     </div>
   </div>
   
-  <?php include "../includes/footer.php"?>
+  
 
 </body>
+<?php include "../includes/footer.php"?>
 </html>

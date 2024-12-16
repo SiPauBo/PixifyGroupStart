@@ -20,24 +20,11 @@ include '../includes/db_connection.php';
   <style>
     body {
       background-color: #f5f8fc;
-      font-family: 'Arial', sans-serif;
+   
     }
     
-    .navbar-brand {
-      font-weight: bold;
-      color: #6173F4;
-      font-size: 1.8rem;
-    }
+  
 
-    .nav-link {
-      color: #000;
-      font-weight: bold;
-      margin-right: 15px;
-    }
-
-    .nav-link:hover {
-      color: #6173F4;
-    }
 
     .cart-container {
       background-color: #fff;
@@ -99,25 +86,6 @@ include '../includes/db_connection.php';
       background-color: #4f5ccf;
     }
 
-    footer {
-      margin-top: 50px;
-      font-size: 14px;
-      text-align: center;
-      color: gray;
-    }
-
-    footer .container {
-      max-width: 600px;
-    }
-
-    footer hr {
-      border: 0.5px solid #e0e0e0;
-    }
-
-    footer p {
-      margin: 0;
-      line-height: 1.5;
-    }
 
   </style>
   <?php include '../includes/font.php'; ?>
@@ -154,7 +122,8 @@ include '../includes/db_connection.php';
     </div>
   </div>
 
-  <?php include "../includes/footer.php"?>
+ 
 
 </body>
+<?php include "../includes/footer.php"?>
 </html>
