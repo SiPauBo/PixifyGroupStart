@@ -30,7 +30,7 @@ if ($is_logged_in) {
                     <a class="nav-link" href="discover.php">Discover</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Subscriptions</a>
+                    <a class="nav-link" href="subscriptions.php">Subscriptions</a>
                 </li>
 
                 <!-- Conditional Rendering Based on Login Status -->
