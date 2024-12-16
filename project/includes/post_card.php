@@ -14,9 +14,15 @@ function renderPostCard($post) {
             <img src="<?php echo htmlspecialchars($imageSource); ?>" alt="<?php echo htmlspecialchars($post['title']); ?>" class="card-image">
         </a>
         <div class="card-hover-info">
-            <div class="card-details">
-                <img src="<?php echo $profilePicture; ?>" alt="User" class="user-image">
-                <span class="username"><?php echo htmlspecialchars($post['username']); ?></span>
+            <div class="card-details container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="<?php echo $profilePicture; ?>" alt="User" class="user-image" style="height:40px; width:40px;">
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center">
+                        <span class="username"><?php echo htmlspecialchars($post['username']); ?></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

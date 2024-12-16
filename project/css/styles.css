@@ -331,21 +331,22 @@
 }
 
 .card-hover-info {
+
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 20%; /* Occupy 20% of the card's height */
+  height: 17,5%; /* Occupy 10% of the card's height */
   background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
   color: white;
   display: flex;
   align-items: center;
   padding: 5px;
   justify-content: flex-start;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0.3s, opacity 0.3s ease-in-out;
+  opacity: 1; /* Always visible */
+  visibility: visible; /* Always visible */
 }
+/*asdasd*/
 
 .image-card:hover .card-hover-info {
   visibility: visible;
@@ -353,20 +354,26 @@
 }
 
 .user-image {
-  width: auto; /* Allow width to scale proportionally */
-  height: 80%; /* Maintain height relative to the .card-hover-info */
+  width: 40px; /* Fixed width for the profile picture */
+  height: 40px;
   border-radius: 50%; /* Circular profile picture */
-  margin-right: 10px;
-  border: 2px solid white; /* Highlight with border */
-  object-fit: cover; /* Ensure image fits within the circular area */
+  border: 2px solid white;
+  object-fit: cover;
 }
 
 .username {
-  font-size: 12px;
+  margin-left: 10px; /* Add space between the image and username */
+  font-size: 14px;
   font-weight: bold;
+  color: white;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: white;
+  flex-grow: 1; /* Push the username to the right as needed */
+  text-align: left;
 }
+
 /*asd*/
+/*asd*/
+/*sadasdads*/
+/*Hallo*/

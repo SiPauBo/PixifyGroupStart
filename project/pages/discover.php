@@ -40,7 +40,6 @@ $resulting = $connection->query($postsQuery) or die($connection->error);
     <title>Discover - Pixify</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/post_style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <?php include '../includes/font.php'; ?>
     <style>
@@ -72,8 +71,10 @@ $resulting = $connection->query($postsQuery) or die($connection->error);
         </div>
     </div>
 
-    <?php include '../includes/footer.php'; ?>
+   
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <?php include '../includes/footer.php'; ?>
 </body>
 </html>
