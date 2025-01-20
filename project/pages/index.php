@@ -16,16 +16,22 @@
 
     <!-- Header Section -->
     <section class="header-section text-center">
-    <div class="row align-items-start ">
+    <div class="row align-items-start">
         <div class="container col text-center pt-5 mt-5">
             <h1 class="display-4">Discover and share your photos with the world</h1>
             <a href="login.php" class="btn btn-primary mt-4">Sign In</a>
         </div>
-        <div class="container col mb-0">
-           <img src="../images/cat-png.png" alt="cat" class="img-fluid mb-0">
+        
+        <!-- Hide cat on mobile screens -->
+        <div class="container col d-flex align-items-end justify-content-center position-relative d-none d-md-flex">
+            <img src="../images/cat-png.png" alt="cat" class="img-fluid cat-img">
         </div>
-</div>
-    </section>
+    </div>
+</section>
+
+
+
+
 
     <!-- Main Content -->
     <section class="about-section text-center py-5">

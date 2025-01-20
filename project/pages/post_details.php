@@ -170,6 +170,12 @@ while ($row = $commentsResult->fetch_assoc()) {
                     <img src="../uploads/<?php echo htmlspecialchars($post['profile_picture'] ?? '../images/user-default.png'); ?>" alt="User" class="rounded-circle me-2" style="width: 50px; height: 50px;">
                     <strong><?php echo htmlspecialchars($post['username']); ?></strong>
                 </div>
+                <div class="d-flex align-items-center mt-3">
+                    <button class="btn btn-primary m-2">Buy</button>
+                   
+                    <button class="btn btn-primary ">Add to Cart</button>
+                </div>
+               
             </div>
         </div>
 
