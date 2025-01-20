@@ -15,7 +15,20 @@ if ($is_logged_in) {
     $user = $result->fetch_assoc();
     $profile_picture = $user['profile_picture'] ?? '../images/user-default.png'; // Default image if no profile picture
 }
+
+$hasPurchases = false;
+if ($is_logged_in) {
+    $purchasesQuery = "SELECT COUNT(*) AS purchase_count FROM purchases WHERE user_id = ?";
+    $stmt = $connection->prepare($purchasesQuery);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = $result->fetch_assoc();
+    $hasPurchases = $data['purchase_count'] > 0;
+    $stmt->close();
+}
 ?>
+
 
 <nav class="navbar navbar-expand-lg bg-light">
     <div class="container">
@@ -32,6 +45,13 @@ if ($is_logged_in) {
                 <li class="nav-item">
                     <a class="nav-link" href="subscriptions.php">Subscriptions</a>
                 </li>
+                
+                
+                <?php if ($is_logged_in && $hasPurchases): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventory.php">My Purchases</a>
+                    </li>
+                <?php endif; ?>
 
                 <!-- Conditional Rendering Based on Login Status -->
                 <?php if ($is_logged_in): ?>
