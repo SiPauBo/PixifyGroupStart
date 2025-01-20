@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = htmlspecialchars($_POST['title']);
     $description = htmlspecialchars($_POST['description']);
     $category_id = intval($_POST['category']);
+    $price = floatval($_POST['price']); // Capture the price input
     $user_id = $_SESSION['user_id'];
 
     // Handle file upload
@@ -26,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($uploadSuccess) {
         $imageUrl = basename($imageFile); // Save only the file name in the database
 
-        // Insert post data into the database
+        // Insert post data into the database including price
         $insertPostQuery = "
-            INSERT INTO posts (user_id, title, description, image_url, created_at) 
-            VALUES ('$user_id', '$title', '$description', '$imageUrl', NOW())
+            INSERT INTO posts (user_id, title, description, image_url, price, created_at) 
+            VALUES ('$user_id', '$title', '$description', '$imageUrl', '$price', NOW())
         ";
         $connection->query($insertPostQuery) or die($connection->error);
 
@@ -92,6 +93,11 @@ $categoriesResult = $connection->query($categoriesQuery);
                         </option>
                     <?php endwhile; ?>
                 </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Price (in EUR)</label>
+                <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" placeholder="Enter price" required>
             </div>
 
             <div class="mb-3">

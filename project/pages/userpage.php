@@ -13,14 +13,17 @@ if (!isset($_SESSION['user_id'])) {
 // Get user ID from session
 $user_id = $_SESSION['user_id'];
 
-// Fetch user profile details
+// Fetch user profile details including social links
 $userQuery = "
-    SELECT username, profile_picture, bio 
+    SELECT username, profile_picture, bio, social_links 
     FROM users 
     WHERE id = $user_id
 ";
 $userResult = $connection->query($userQuery);
 $user = $userResult->fetch_assoc();
+
+// Decode social links JSON
+$social_links = json_decode($user['social_links'], true);
 
 // Fetch user posts (gallery images)
 $postsQuery = "
@@ -88,6 +91,15 @@ $postsResult = $connection->query($postsQuery);
       height: auto;
       border-radius: 10px;
     }
+    .social-links a {
+      display: inline-block;
+      margin: 0 10px;
+      color: #007bff;
+      font-size: 1.5rem;
+    }
+    .social-links a:hover {
+      color: #0056b3;
+    }
     footer {
       margin-top: 50px;
       font-size: 14px;
@@ -95,7 +107,7 @@ $postsResult = $connection->query($postsQuery);
       color: gray;
     }
   </style>
-   <?php include '../includes/font.php'; ?>
+  <?php include '../includes/font.php'; ?>
 </head>
 <body>
 
@@ -108,22 +120,36 @@ $postsResult = $connection->query($postsQuery);
     <img src="<?php echo htmlspecialchars(!empty($user['profile_picture']) ? '../uploads/' . $user['profile_picture'] : 'https://via.placeholder.com/100'); ?>" alt="Profile Picture">
     <div class="profile-name"><?php echo htmlspecialchars($user['username']); ?></div>
     <p><?php echo htmlspecialchars($user['bio'] ?? 'No bio provided.'); ?></p>
-    <button class="btn-custom">Edit Profile</button>
+
+    <!-- Social Links Section -->
+    <div class="social-links mt-3">
+      <?php if (!empty($social_links['twitter'])): ?>
+        <a href="https://twitter.com/<?php echo htmlspecialchars($social_links['twitter']); ?>" target="_blank">
+          <i class="bi bi-twitter"></i>
+        </a>
+      <?php endif; ?>
+      <?php if (!empty($social_links['instagram'])): ?>
+        <a href="https://instagram.com/<?php echo htmlspecialchars($social_links['instagram']); ?>" target="_blank">
+          <i class="bi bi-instagram"></i>
+        </a>
+      <?php endif; ?>
+    </div>
+
+    <a href="profile_setup.php" class="btn btn-custom">Edit Profile</a>
   </div>
 
   <!-- Gallery Section -->
+  <h2 class="text-center mt-5">My Posts</h2>
   <div class="gallery row g-4 mt-4">
     <?php while ($post = $postsResult->fetch_assoc()): ?>
       <div class="col-md-3">
         <a href="post_details.php?post_id=<?php echo $post['id']; ?>">
-          <img src="<?php echo htmlspecialchars($post['image_url']); ?>" alt="<?php echo htmlspecialchars($post['title']); ?>" class="img-fluid">
+          <img src="../uploads/<?php echo htmlspecialchars($post['image_url']); ?>" alt="<?php echo htmlspecialchars($post['title']); ?>" class="img-fluid">
         </a>
       </div>
     <?php endwhile; ?>
   </div>
 </div>
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

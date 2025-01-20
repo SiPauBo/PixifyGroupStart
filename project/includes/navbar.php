@@ -4,7 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 include '../includes/db_connection.php';
 
-
 // Check if the user is logged in
 $is_logged_in = isset($_SESSION['user_id']); 
 
@@ -27,8 +26,10 @@ if ($is_logged_in) {
     $hasPurchases = $data['purchase_count'] > 0;
     $stmt->close();
 }
-?>
 
+// Calculate the number of items in the cart
+$cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+?>
 
 <nav class="navbar navbar-expand-lg bg-light">
     <div class="container">
@@ -39,13 +40,14 @@ if ($is_logged_in) {
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+            
+
                 <li class="nav-item">
                     <a class="nav-link" href="discover.php">Discover</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="subscriptions.php">Subscriptions</a>
                 </li>
-                
                 
                 <?php if ($is_logged_in && $hasPurchases): ?>
                     <li class="nav-item">
@@ -67,19 +69,14 @@ if ($is_logged_in) {
                         <a class="nav-link position-relative" href="cart.php">
                             <i class="bi bi-cart3" style="font-size: 1.5rem;"></i>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?php echo isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : '0'; ?>
+                                <?php echo $cart_count; ?>
                             </span>
                         </a>
                     </li>
                     <li class="nav-item">
-                    <li class="nav-item">
-                    <a class="nav-link" href="userpage.php">
-                    <img src="<?php echo isset($profile_picture) && !empty($profile_picture) ? '../uploads/' . htmlspecialchars($profile_picture) : '../images/user-default.png'; ?>" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px;">
-</a>
-
-    </a>
-</li>
-
+                        <a class="nav-link" href="userpage.php">
+                            <img src="<?php echo isset($profile_picture) && !empty($profile_picture) ? '../uploads/' . htmlspecialchars($profile_picture) : '../images/user-default.png'; ?>" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px;">
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../includes/logout.php">Logout</a>

@@ -5,42 +5,33 @@ if (session_status() === PHP_SESSION_NONE) {
 
 include '../includes/db_connection.php';
 
-$user_id = intval($_GET['id']);
-
-// Prevent deletion of the admin account itself
-if ($user_id == $_SESSION['user_id']) {
-    header('Location: ../pages/manage_users.php?error=You cannot delete your own account.');
+if (!isset($_GET['user_id']) || empty($_GET['user_id'])) {
+    header('Location: ../pages/manage_users.php?error=Invalid request');
     exit();
 }
 
-// Start a transaction to ensure data consistency
-$connection->begin_transaction();
+$user_id = intval($_GET['user_id']);
 
 try {
-    // Delete related data in other tables (e.g., comments, likes, posts)
+    $connection->begin_transaction();
+
+    // Delete related comments, posts, and other dependent records
     $connection->query("DELETE FROM comments WHERE user_id = $user_id");
-    $connection->query("DELETE FROM likes WHERE user_id = $user_id");
     $connection->query("DELETE FROM posts WHERE user_id = $user_id");
-    $connection->query("DELETE FROM followers WHERE follower_id = $user_id OR followed_id = $user_id");
+    $connection->query("DELETE FROM likes WHERE user_id = $user_id");
+    $connection->query("DELETE FROM reports WHERE user_id = $user_id");
 
-    // Delete the user
-    $query = "DELETE FROM users WHERE id = ?";
-    $stmt = $connection->prepare($query);
+    // Now delete the user
+    $stmt = $connection->prepare("DELETE FROM users WHERE id = ?");
     $stmt->bind_param("i", $user_id);
+    $stmt->execute();
 
-    if ($stmt->execute()) {
-        // Commit the transaction
-        $connection->commit();
-        header('Location: ../pages/manage_users.php?success=User deleted successfully.');
-    } else {
-        throw new Exception("Failed to delete the user.");
-    }
+    $connection->commit();
 
-    $stmt->close();
-} catch (Exception $e) {
-    // Roll back the transaction in case of an error
+    header('Location: ../pages/manage_users.php?success=User deleted successfully.');
+} catch (mysqli_sql_exception $e) {
     $connection->rollback();
-    header('Location: ../pages/manage_users.php?error=' . $e->getMessage());
+    header('Location: ../pages/manage_users.php?error=Failed to delete user.');
 }
 
 $connection->close();

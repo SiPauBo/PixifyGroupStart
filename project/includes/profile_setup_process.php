@@ -2,60 +2,46 @@
 session_start();
 include 'db_connection.php';
 
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../pages/login.php");
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
-$bio = trim($_POST['bio']);
-$social_links = trim($_POST['social_links']);
-$profile_picture = $_FILES['profile_picture'];
+$bio = htmlspecialchars($_POST['bio']);
+$twitter = htmlspecialchars($_POST['twitter']);
+$instagram = htmlspecialchars($_POST['instagram']);
 
-// Set social_links to an empty JSON object if it's empty
-if (empty($social_links)) {
-    $social_links = '{}';
-} elseif (json_decode($social_links) === null) {
-    die("Invalid JSON format for social links.");
-}
+// Prepare social links in JSON format
+$social_links = json_encode([
+    'twitter' => !empty($twitter) ? "https://twitter.com/$twitter" : "",
+    'instagram' => !empty($instagram) ? "https://instagram.com/$instagram" : ""
+]);
 
-// Set the upload directory using a valid path
-$upload_dir = realpath(__DIR__ . "/../uploads/") . "/";
-$profile_picture_name = null;
-
-// Ensure the upload directory exists
-if (!is_dir($upload_dir)) {
-    mkdir($upload_dir, 0777, true); // Create the directory if it doesn't exist
-}
-
-if (isset($profile_picture) && $profile_picture['size'] > 0) {
-    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-    $file_type = mime_content_type($profile_picture['tmp_name']);
-
-    if (!in_array($file_type, $allowed_types)) {
-        die("Only JPG, PNG, and GIF files are allowed.");
-    }
-
-    // Create a unique file name for the uploaded profile picture
-    $profile_picture_name = "profile_" . $user_id . "_" . time() . "." . pathinfo($profile_picture['name'], PATHINFO_EXTENSION);
-    $target_file = $upload_dir . $profile_picture_name;
-
-    // Attempt to move the uploaded file to the uploads directory
-    if (!move_uploaded_file($profile_picture['tmp_name'], $target_file)) {
-        die("Failed to upload the profile picture.");
+// Handle profile picture upload
+if (!empty($_FILES['profile_picture']['name'])) {
+    $targetDir = "../uploads/";
+    $imageFileName = basename($_FILES['profile_picture']['name']);
+    $targetFilePath = $targetDir . $imageFileName;
+    
+    if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $targetFilePath)) {
+        $profile_picture = $imageFileName;
+    } else {
+        $profile_picture = null;
     }
 }
 
-// Update user profile in the database
-$update_query = "UPDATE users SET bio = ?, profile_picture = ?, social_links = ?, first_time_login = 0 WHERE id = ?";
-$stmt = $connection->prepare($update_query);
-$stmt->bind_param("sssi", $bio, $profile_picture_name, $social_links, $user_id);
+// Update profile information in database
+$updateQuery = "UPDATE users SET bio = ?, profile_picture = ?, social_links = ? WHERE id = ?";
+$stmt = $connection->prepare($updateQuery);
+$stmt->bind_param("sssi", $bio, $profile_picture, $social_links, $user_id);
 
 if ($stmt->execute()) {
-    header("Location: ../pages/index.php"); // Redirect to start page after profile setup
+    header("Location: ../pages/userpage.php?success=Profile updated successfully.");
     exit();
 } else {
-    echo "Error updating profile: " . $stmt->error;
+    echo "Error updating profile: " . $connection->error;
 }
 
 $stmt->close();
