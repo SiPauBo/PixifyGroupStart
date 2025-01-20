@@ -142,7 +142,7 @@ while ($row = $commentsResult->fetch_assoc()) {
     <!-- Fullscreen Overlay -->
     <div id="fullscreenOverlay" class="fullscreen-overlay">
         <img id="fullscreenImage" src="" alt="Fullscreen View">
-        <button class="btn btn-secondary back-btn" onclick="exitFullscreen()">Back</button>
+        <button class="btn btn-secondary back-btn" id="BackButton">Back</button>
 
     </div>
 
@@ -228,27 +228,45 @@ while ($row = $commentsResult->fetch_assoc()) {
     <?php include '../includes/footer.php'; ?>
 
     <script>
-        function toggleFullscreen() {
-            const img = document.getElementById('postImage');
-            const overlay = document.getElementById('fullscreenOverlay');
-            const fullscreenImg = document.getElementById('fullscreenImage');
+    function toggleFullscreen() {
+        const img = document.getElementById('postImage');
+        const overlay = document.getElementById('fullscreenOverlay');
+        const fullscreenImg = document.getElementById('fullscreenImage');
 
-            fullscreenImg.src = img.src; // Use the post image source
-            overlay.style.display = 'flex'; // Show the overlay
+        if (overlay.style.display === 'flex') {
+            overlay.style.display = 'none';  // Hide if already displayed
+        } else {
+            fullscreenImg.src = img.src;  // Set the image source
+            overlay.style.display = 'flex';  // Show the overlay
         }
-
-        function exitFullscreen() {
-    const overlay = document.getElementById('fullscreenOverlay');
-    if (overlay) {
-        console.log("Hiding fullscreen overlay...");
-        overlay.style.display = 'none'; // Hide the overlay
-    } else {
-        console.error("Fullscreen overlay not found.");
     }
-}
 
-//tmm
-    </script>
+    function exitFullscreen() {
+      
+        const overlay = document.getElementById('fullscreenOverlay');
+        
+        if (overlay) {
+            overlay.style.display = 'none';  // Hide the overlay
+            
+        } else {
+            console.warn("Fullscreen overlay not found.");
+        }
+    }
+    
+    document.getElementById('BackButton').addEventListener('click', function(event) {
+        if (event.target === this) {
+            exitFullscreen();
+        }
+    });
+
+    // Allow clicking outside the image to exit fullscreen
+    document.getElementById('fullscreenOverlay').addEventListener('click', function(event) {
+        if (event.target === this) {
+            exitFullscreen();
+        }
+    });
+</script>
+
 </body>
 
 </html>

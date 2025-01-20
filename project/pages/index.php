@@ -19,7 +19,7 @@
     <div class="row align-items-start ">
         <div class="container col text-center pt-5 mt-5">
             <h1 class="display-4">Discover and share your photos with the world</h1>
-            <button class="btn btn-primary mt-3">Sign In</button>
+            <a href="login.php" class="btn btn-primary mt-4">Sign In</a>
         </div>
         <div class="container col mb-0">
            <img src="../images/cat-png.png" alt="cat" class="img-fluid mb-0">
@@ -44,7 +44,7 @@
             From simple photo edits to advanced digital compositions, Pixify gives you everything you need to transform your creative visions into tangible digital creations.
             Start sharing your masterpieces with the world today!
         </p>
-        <a href="#services" class="btn btn-primary mt-4">Explore Our Content</a>
+        <a href="subscriptions.php" class="btn btn-primary mt-4">Explore Our Content</a>
     </div>
 </section>
 
@@ -79,7 +79,7 @@
 
     <section class="join-section text-center py-5  text-white">
         <h2>Join Our Community Today!</h2>
-        <button class="btn btn-light mt-3">Sign Up</button>
+        <a href="signup.php" class="btn btn-primary mt-4">Sign Up</a>
     </section>
 
     
