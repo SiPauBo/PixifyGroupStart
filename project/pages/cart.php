@@ -22,44 +22,36 @@ include '../includes/navbar.php';
     <?php else: 
         $total_price = 0;  // Initialize total price
     ?>
-        <table class="table table-bordered table-striped">
-            <thead class="table-primary">
-                <tr>
-                    <th class="text-center">Image</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th class="text-center">Price</th>
-                    <th class="text-center">Remove</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($_SESSION['cart'] as $key => $item): 
-                    $item_price = isset($item['price']) ? floatval($item['price']) : 0.00;  // Ensure price key exists
-                    $total_price += $item_price;
-                ?>
-                    <tr>
-                        <td class="text-center">
-                            <img src="<?php echo htmlspecialchars($item['image_url'] ?? '../images/placeholder.png'); ?>" 
-                                 class="img-fluid rounded" 
-                                 alt="Product Image" 
-                                 style="max-width: 150px; height: auto;"
-                                 onerror="this.onerror=null; this.src='../images/placeholder.png';">
-                        </td>
-                        <td><?php echo htmlspecialchars($item['title'] ?? 'N/A'); ?></td>
-                        <td><?php echo htmlspecialchars($item['description'] ?? 'No description available.'); ?></td>
-                        <td class="text-center">$<?php echo number_format($item_price, 2); ?></td>
-                        <td class="text-center">
-                            <a href="../includes/remove_from_cart.php?index=<?php echo $key; ?>" 
-                               class="btn btn-danger btn-sm">Remove</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <div class="list-group">
+            <?php foreach ($_SESSION['cart'] as $key => $item): 
+                $item_price = isset($item['price']) ? floatval($item['price']) : 0.00;  // Ensure price key exists
+                $total_price += $item_price;
+            ?>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="<?php echo htmlspecialchars($item['image_url'] ?? '../images/placeholder.png'); ?>" 
+                             class="img-fluid rounded me-3" 
+                             alt="Product Image" 
+                             style="width: 100px; height: auto;"
+                             onerror="this.onerror=null; this.src='../images/placeholder.png';">
+                        <div>
+                            <h5><?php echo htmlspecialchars($item['title'] ?? 'N/A'); ?></h5>
+                            <p class="text-muted mb-1">Author: <?php echo htmlspecialchars($item['author'] ?? 'Unknown'); ?></p>
+                            <p class="fw-bold">$<?php echo number_format($item_price, 2); ?></p>
+                        </div>
+                    </div>
+                    <a href="../includes/remove_from_cart.php?index=<?php echo $key; ?>" 
+                       class="btn btn-danger btn-sm">Remove</a>
+                </div>
+            <?php endforeach; ?>
+        </div>
 
         <div class="d-flex justify-content-between align-items-center mt-4">
-            <h4>Total Price: <span class="text-success">$<?php echo number_format($total_price, 2); ?></span></h4>
-            <a href="checkout.php" class="btn btn-success btn-lg">Proceed to Checkout</a>
+            <h4>Total: <span class="text-success">$<?php echo number_format($total_price, 2); ?></span></h4>
+            <div>
+                <a href="../includes/clear_cart.php" class="btn btn-outline-secondary me-2">Clear All</a>
+                <a href="checkout.php" class="btn btn-success btn-lg">Checkout</a>
+            </div>
         </div>
     <?php endif; ?>
 </div>
