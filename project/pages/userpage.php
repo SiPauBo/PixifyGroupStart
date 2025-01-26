@@ -10,17 +10,42 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Get user ID from session
 $user_id = $_SESSION['user_id'];
 
-// Fetch user profile details including social links
+// Handle banner upload
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['banner_image'])) {
+    $uploadDir = '../uploads/';
+    $bannerName = 'banner_' . $user_id . '_' . time() . '.' . pathinfo($_FILES['banner_image']['name'], PATHINFO_EXTENSION);
+    $targetPath = $uploadDir . $bannerName;
+
+    if (move_uploaded_file($_FILES['banner_image']['tmp_name'], $targetPath)) {
+        $updateBannerQuery = "UPDATE users SET banner_image = ? WHERE id = ?";
+        $stmt = $connection->prepare($updateBannerQuery);
+        $stmt->bind_param('si', $bannerName, $user_id);
+        $stmt->execute();
+        $stmt->close();
+        header('Location: userpage.php');
+        exit();
+    }
+}
+
+// Fetch user profile details including social links and banner
 $userQuery = "
-    SELECT username, profile_picture, bio, social_links 
+    SELECT username, profile_picture, bio, social_links, banner_image 
     FROM users 
-    WHERE id = $user_id
+    WHERE id = ?
 ";
-$userResult = $connection->query($userQuery);
-$user = $userResult->fetch_assoc();
+$stmt = $connection->prepare($userQuery);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+// Check if user data is retrieved
+if (!$user) {
+    die("User not found.");
+}
 
 // Decode social links JSON
 $social_links = json_decode($user['social_links'], true);
@@ -29,10 +54,14 @@ $social_links = json_decode($user['social_links'], true);
 $postsQuery = "
     SELECT id, image_url, title 
     FROM posts 
-    WHERE user_id = $user_id
+    WHERE user_id = ?
     ORDER BY created_at DESC
 ";
-$postsResult = $connection->query($postsQuery);
+$stmt = $connection->prepare($postsQuery);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$postsResult = $stmt->get_result();
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -48,11 +77,15 @@ $postsResult = $connection->query($postsQuery);
       background-color: #f5f8fc;
     }
     .profile-banner {
-      background-image: url('https://via.placeholder.com/1200x300');
+      background: url('<?php echo !empty($user['banner_image']) ? '../uploads/' . htmlspecialchars($user['banner_image']) : 'https://via.placeholder.com/1200x300'; ?>') no-repeat center center;
       background-size: cover;
-      background-position: center;
       height: 300px;
       position: relative;
+    }
+    .profile-banner form {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
     }
     .profile-details {
       position: relative;
@@ -91,14 +124,19 @@ $postsResult = $connection->query($postsQuery);
       height: auto;
       border-radius: 10px;
     }
-    .social-links a {
+    .social-buttons a {
       display: inline-block;
       margin: 0 10px;
-      color: #007bff;
+      color: #fff;
       font-size: 1.5rem;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 50px;
     }
-    .social-links a:hover {
-      color: #0056b3;
+    .btn-twitter { background-color: #1DA1F2; }
+    .btn-instagram { background-color: #E1306C; }
+    .social-buttons a:hover {
+      opacity: 0.8;
     }
     footer {
       margin-top: 50px;
@@ -112,25 +150,31 @@ $postsResult = $connection->query($postsQuery);
 <body>
 
 <?php include "../includes/navbar.php"?>
-<div class="profile-banner"></div>
+
+<div class="profile-banner">
+  <form action="userpage.php" method="POST" enctype="multipart/form-data">
+    <input type="file" name="banner_image" accept="image/*" required>
+    <button type="submit" class="btn btn-light btn-sm">Change Banner</button>
+  </form>
+</div>
 
 <div class="container">
   <!-- Profile Details -->
   <div class="profile-details text-center">
     <img src="<?php echo htmlspecialchars(!empty($user['profile_picture']) ? '../uploads/' . $user['profile_picture'] : 'https://via.placeholder.com/100'); ?>" alt="Profile Picture">
-    <div class="profile-name"><?php echo htmlspecialchars($user['username']); ?></div>
+    <div class="profile-name"><?php echo htmlspecialchars($user['username'] ?? 'Unknown User'); ?></div>
     <p><?php echo htmlspecialchars($user['bio'] ?? 'No bio provided.'); ?></p>
 
-    <!-- Social Links Section -->
-    <div class="social-links mt-3">
+    <!-- Social Media Buttons -->
+    <div class="social-buttons mt-3">
       <?php if (!empty($social_links['twitter'])): ?>
-        <a href="https://twitter.com/<?php echo htmlspecialchars($social_links['twitter']); ?>" target="_blank">
-          <i class="bi bi-twitter"></i>
+        <a href="https://twitter.com/<?php echo htmlspecialchars($social_links['twitter']); ?>" class="btn-twitter" target="_blank">
+          <i class="bi bi-twitter"></i> Twitter
         </a>
       <?php endif; ?>
       <?php if (!empty($social_links['instagram'])): ?>
-        <a href="https://instagram.com/<?php echo htmlspecialchars($social_links['instagram']); ?>" target="_blank">
-          <i class="bi bi-instagram"></i>
+        <a href="https://instagram.com/<?php echo htmlspecialchars($social_links['instagram']); ?>" class="btn-instagram" target="_blank">
+          <i class="bi bi-instagram"></i> Instagram
         </a>
       <?php endif; ?>
     </div>

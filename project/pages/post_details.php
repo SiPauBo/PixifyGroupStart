@@ -20,6 +20,7 @@ $postQuery = "
         p.description, 
         p.image_url, 
         p.created_at, 
+        u.id AS user_id,
         u.username, 
         u.profile_picture, 
         COALESCE(p.price, 0) AS price,
@@ -84,15 +85,16 @@ while ($row = $commentsResult->fetch_assoc()) {
         <div class="col-md-8">
             <img id="postImage" src="<?php echo htmlspecialchars('../uploads/' . $post['image_url']); ?>" 
                  alt="<?php echo htmlspecialchars($post['title']); ?>" 
-                 class="img-fluid rounded">
-            <button class="btn btn-primary mt-3" onclick="toggleFullscreen()">Fullscreen</button>
+                 class="img-fluid rounded"
+                 onclick="toggleFullscreen(this)">
+            <button class="btn btn-primary mt-3" onclick="toggleFullscreen(document.getElementById('postImage'))">Fullscreen</button>
         </div>
         <div class="col-md-4">
             <h2><?php echo htmlspecialchars($post['title']); ?></h2>
-            <p><strong>Posted on:</strong> <?php echo isset($post['created_at']) ? date("F j, Y", strtotime($post['created_at'])) : 'N/A'; ?></p>
+            <p><strong>Posted on:</strong> <?php echo date("F j, Y", strtotime($post['created_at'])); ?></p>
             <p><strong>Price:</strong> $<?php echo number_format($post['price'], 2); ?></p>
-            <p><?php echo htmlspecialchars($post['description'] ?? 'No description provided.'); ?></p>
-            <p><i class="bi bi-heart-fill text-danger"></i> <?php echo $post['like_count'] ?? 0; ?> Likes</p>
+            <p><?php echo htmlspecialchars($post['description']); ?></p>
+            <p><i class="bi bi-heart-fill text-danger"></i> <?php echo $post['like_count']; ?> Likes</p>
 
             <form action="../includes/like_post.php" method="POST">
                 <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
@@ -102,9 +104,11 @@ while ($row = $commentsResult->fetch_assoc()) {
             </form>
 
             <div class="d-flex align-items-center mt-3">
-                <img src="../uploads/<?php echo htmlspecialchars($post['profile_picture'] ?? '../images/user-default.png'); ?>" 
-                     alt="User" class="rounded-circle me-2" style="width: 50px; height: 50px;">
-                <strong><?php echo htmlspecialchars($post['username'] ?? 'Unknown user'); ?></strong>
+                <a href="user_profile.php?user_id=<?php echo $post['user_id']; ?>">
+                    <img src="../uploads/<?php echo htmlspecialchars($post['profile_picture']); ?>" 
+                         alt="User" class="rounded-circle me-2" style="width: 50px; height: 50px;">
+                </a>
+                <strong><?php echo htmlspecialchars($post['username']); ?></strong>
             </div>
 
             <form action="../includes/add_to_cart.php" method="POST">
@@ -154,12 +158,12 @@ while ($row = $commentsResult->fetch_assoc()) {
 </div>
 
 <script>
-function toggleFullscreen() {
-    document.getElementById('fullscreenOverlay').style.display = 'flex';
-}
-
-function exitFullscreen() {
-    document.getElementById('fullscreenOverlay').style.display = 'none';
+function toggleFullscreen(image) {
+    if (!document.fullscreenElement) {
+        image.requestFullscreen().catch(err => console.error("Error attempting to enable fullscreen", err));
+    } else {
+        document.exitFullscreen();
+    }
 }
 </script>
 
