@@ -1,103 +1,81 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-<body>
 <?php
-function success($description) {
-    if (isset($_GET['paymentId']) && isset($_GET['PayerID'])) {
-        $paymentId = $_GET['paymentId'];
-        $payerId = $_GET['PayerID'];
+session_start();
+include '../includes/db_connection.php';
 
-        // PayPal API Credentials
-        $clientId = "AWLnbE5Flos8TbpH0-kLjAtgHallDrflXTUosykoryMAbOtQvTWeckWyXhXHyyOtuW7cUavmCn1Ve0UK";
-        $clientSecret = "EMNdRnmAfRNprRAw5Up9qt-l5wDl6wyamPv2MKaJIons8eBtPPDJB_MZOD4yL7t4Kx9lUoKuQY-epFi9";
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    die("<div class='alert alert-danger text-center'>User not logged in.</div>");
+}
 
-        // Access Token abrufen
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://api-m.sandbox.paypal.com/v1/oauth2/token");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERPWD, "$clientId:$clientSecret");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
-        curl_setopt($ch, CURLOPT_POST, true);
+$user_id = $_SESSION['user_id'];
 
-        $headers = [
-            "Accept: application/json",
-            "Accept-Language: en_US",
-            "Content-Type: application/x-www-form-urlencoded",
-        ];
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+// Check for required PayPal parameters
+if (isset($_GET['plan'], $_GET['paymentId'], $_GET['PayerID'])) {
+    $plan = $_GET['plan'];  // 'free', 'advanced', 'premium'
+    $paymentId = $_GET['paymentId'];
+    $payerId = $_GET['PayerID'];
 
-        $response = curl_exec($ch);
-        if (!$response) {
-            echo "Fehler beim Abrufen des Access Tokens: " . curl_error($ch);
-            curl_close($ch);
-            exit;
-        }
-
-        $response = json_decode($response);
-        if (isset($response->access_token)) {
-            $accessToken = $response->access_token;
-        } else {
-            echo "Fehler: Kein Access Token erhalten. Antwort von PayPal: <pre>" . print_r($response, true) . "</pre>";
-            curl_close($ch);
-            exit;
-        }
-        curl_close($ch);
-
-        // Zahlung ausführen
-        $url = "https://api-m.sandbox.paypal.com/v1/payments/payment/$paymentId/execute";
-
-        $executeData = [
-            "payer_id" => $payerId
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "Content-Type: application/json",
-            "Authorization: Bearer $accessToken",
-        ]);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($executeData));
-
-        $response = curl_exec($ch);
-        if (!$response) {
-            echo "Fehler beim Ausführen der Zahlung: " . curl_error($ch);
-            curl_close($ch);
-            exit;
-        }
-
-        $response = json_decode($response, true);
-        curl_close($ch);
-
-        if (isset($response['state']) && $response['state'] == 'approved') {
-            echo "<h1>Kauf von $description erfolgreich</h1>";
-            echo "<p>Transaktions-ID: " . $response['id'] . "</p>";
-        } else {
-            echo "<h1>Zahlung fehlgeschlagen</h1>";
-            echo "<p>Fehlerdetails: <pre>" . print_r($response, true) . "</pre></p>";
-        }
-    } else {
-        echo "<h1>Zahlung konnte nicht ausgeführt werden</h1>";
+    // Validate the plan before updating the database
+    $allowed_plans = ['free', 'advanced', 'premium'];
+    if (!in_array($plan, $allowed_plans)) {
+        die("<div class='alert alert-danger text-center'>Invalid subscription plan.</div>");
     }
+
+    // Update the user's subscription plan
+    $updateQuery = "UPDATE users SET subscription_plan = ? WHERE id = ?";
+    $stmt = $connection->prepare($updateQuery);
+    $stmt->bind_param('si', $plan, $user_id);
+
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Subscription Update</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="bg-light">
+    <div class="container py-5 text-center">
+        <div class="card shadow-lg p-5 border-0">
+            <h1 class="mb-4"><i class="fas fa-user-check text-success"></i> Subscription Update</h1>
+            <?php
+            if ($stmt->execute()) {
+                echo "<p class='lead'>Your subscription has been successfully updated to: <strong class='text-primary'>" . htmlspecialchars($plan) . "</strong></p>";
+                echo "<a href='../pages/index.php' class='btn btn-success mt-3'><i class='fas fa-home'></i> Go to Homepage</a>";
+            } else {
+                echo "<p class='text-danger'>Error updating subscription. Please try again later.</p>";
+            }
+            ?>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>
+    <?php
+    $stmt->close();
+    $connection->close();
+} else {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Payment Failed</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    </head>
+    <body class="bg-light">
+    <div class="container py-5 text-center">
+        <div class="alert alert-danger shadow-lg p-5">
+            <h1 class="mb-4"><i class="fas fa-exclamation-circle"></i> Payment Failed</h1>
+            <p class="lead">Missing payment details. Please try again.</p>
+            <a href='../pages/index.php' class='btn btn-danger'><i class='fas fa-arrow-left'></i> Return to Homepage</a>
+        </div>
+    </div>
+    </body>
+    </html>
+    <?php
 }
 ?>
-
-<div class="card" style="width: 18rem; margin-top: 20px; text-align: center;">
-    <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" class="card-img-top" alt="PayPal logo">
-    <div class="card-body">
-        <h5 class="card-title">Payment Successful</h5>
-        <p class="card-text">Your transaction has been completed. Click the button below to go back to Pixify.</p>
-        <a href="http://yourwebsite.com/index.php" class="btn btn-primary">Back to Pixify</a>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>

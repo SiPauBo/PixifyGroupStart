@@ -10,14 +10,16 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 $bio = htmlspecialchars($_POST['bio']);
-$twitter = htmlspecialchars($_POST['twitter']);
-$instagram = htmlspecialchars($_POST['instagram']);
+$twitter = trim($_POST['twitter']);
+$instagram = trim($_POST['instagram']);
+$existing_profile_picture = $_POST['existing_profile_picture'];
 
-// Prepare social links in JSON format
-$social_links = json_encode([
-    'twitter' => !empty($twitter) ? "https://twitter.com/$twitter" : "",
-    'instagram' => !empty($instagram) ? "https://instagram.com/$instagram" : ""
-]);
+// Process social media links
+$social_links = [
+    'twitter' => (!empty($twitter) && !str_starts_with($twitter, 'http')) ? "https://twitter.com/$twitter" : $twitter,
+    'instagram' => (!empty($instagram) && !str_starts_with($instagram, 'http')) ? "https://instagram.com/$instagram" : $instagram
+];
+$social_links_json = json_encode($social_links);
 
 // Handle profile picture upload
 if (!empty($_FILES['profile_picture']['name'])) {
@@ -28,14 +30,16 @@ if (!empty($_FILES['profile_picture']['name'])) {
     if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $targetFilePath)) {
         $profile_picture = $imageFileName;
     } else {
-        $profile_picture = null;
+        $profile_picture = $existing_profile_picture;
     }
+} else {
+    $profile_picture = $existing_profile_picture;
 }
 
 // Update profile information in database
 $updateQuery = "UPDATE users SET bio = ?, profile_picture = ?, social_links = ? WHERE id = ?";
 $stmt = $connection->prepare($updateQuery);
-$stmt->bind_param("sssi", $bio, $profile_picture, $social_links, $user_id);
+$stmt->bind_param("sssi", $bio, $profile_picture, $social_links_json, $user_id);
 
 if ($stmt->execute()) {
     header("Location: ../pages/userpage.php?success=Profile updated successfully.");
