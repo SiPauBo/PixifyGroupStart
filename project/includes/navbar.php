@@ -8,11 +8,16 @@ include '../includes/db_connection.php';
 $is_logged_in = isset($_SESSION['user_id']); 
 
 // Fetch user information if logged in
+$subscription_plan = 'free'; // Default to free plan
+$profile_picture = '../images/user-default.png';
+
 if ($is_logged_in) {
     $user_id = $_SESSION['user_id'];
-    $result = $connection->query("SELECT profile_picture FROM users WHERE id = $user_id");
+    $result = $connection->query("SELECT profile_picture, subscription_plan FROM users WHERE id = $user_id");
     $user = $result->fetch_assoc();
-    $profile_picture = $user['profile_picture'] ?? '../images/user-default.png'; // Default image if no profile picture
+
+    $profile_picture = !empty($user['profile_picture']) ? '../uploads/' . htmlspecialchars($user['profile_picture']) : $profile_picture;
+    $subscription_plan = $user['subscription_plan'] ?? 'free'; // Default if null
 }
 
 $hasPurchases = false;
@@ -27,6 +32,15 @@ if ($is_logged_in) {
     $stmt->close();
 }
 
+// Determine badge details based on the subscription plan
+$plan_badges = [
+    'free' => ['label' => 'Free', 'class' => 'badge bg-success', 'icon' => '🟩'],
+    'advanced' => ['label' => 'Advanced', 'class' => 'badge bg-primary', 'icon' => '🔷'],
+    'premium' => ['label' => 'Premium', 'class' => 'badge bg-warning', 'icon' => '⭐']
+];
+
+$badge = $plan_badges[$subscription_plan] ?? $plan_badges['free'];
+
 // Calculate the number of items in the cart
 $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
 ?>
@@ -40,8 +54,6 @@ $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-            
-
                 <li class="nav-item">
                     <a class="nav-link" href="discover.php">Discover</a>
                 </li>
@@ -55,16 +67,13 @@ $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
                     </li>
                 <?php endif; ?>
 
-                <!-- Conditional Rendering Based on Login Status -->
                 <?php if ($is_logged_in): ?>
-                    <!-- Admin Dashboard Link -->
                     <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="../pages/admin_dashboard.php">Admin Dashboard</a>
                         </li>
                     <?php endif; ?>
 
-                    <!-- Display Cart Icon, Profile Picture, and Logout Button if Logged In -->
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="cart.php">
                             <i class="bi bi-cart3" style="font-size: 1.5rem;"></i>
@@ -73,16 +82,18 @@ $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
                             </span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    
+                    <li class="nav-item d-flex align-items-center">
+                        <span class="<?php echo $badge['class']; ?> me-2"><?php echo $badge['icon']; ?> <?php echo $badge['label']; ?></span>
                         <a class="nav-link" href="userpage.php">
-                            <img src="<?php echo isset($profile_picture) && !empty($profile_picture) ? '../uploads/' . htmlspecialchars($profile_picture) : '../images/user-default.png'; ?>" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px;">
+                            <img src="<?php echo $profile_picture; ?>" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px;">
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="../includes/logout.php">Logout</a>
                     </li>
                 <?php else: ?>
-                    <!-- Display Login and Sign Up if Not Logged In -->
                     <li class="nav-item">
                         <a class="nav-link" href="../pages/login.php">Login</a>
                     </li>

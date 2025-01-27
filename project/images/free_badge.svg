@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="35">
+  <defs>
+    <linearGradient id="freeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="35" rx="18" fill="url(#freeGradient)" stroke="#047857" stroke-width="2" />
+  <text x="50" y="22" font-family="Arial" font-size="16" fill="white" font-weight="bold" text-anchor="middle">Free</text>
+</svg>

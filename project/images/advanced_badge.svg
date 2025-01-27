@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="35">
+  <defs>
+    <linearGradient id="advancedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1E3A8A"/>
+    </linearGradient>
+  </defs>
+  <rect width="130" height="35" rx="18" fill="url(#advancedGradient)" stroke="#1E40AF" stroke-width="2" />
+  <text x="65" y="22" font-family="Arial" font-size="16" fill="white" font-weight="bold" text-anchor="middle">Advanced</text>
+</svg>
